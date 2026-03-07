@@ -1,0 +1,410 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────
+   CSS Variables
+───────────────────────────────────────────────────────── */
+:root {
+  /* Easing curves — long, cinematic */
+  --ease-expo:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-ios:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ─────────────────────────────────────────────────────────
+   Base
+───────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; padding: 0; margin: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: #050510;
+  color: #F8FAFC;
+  font-family: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+  overflow-x: hidden;
+  min-height: 100dvh;
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Glass + liquid: base frosted + subtle displacement layer */
+.glass-ios {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+    0 12px 32px -8px rgba(0, 0, 0, 0.2);
+}
+
+/* Sirf header ke andar — halka liquid warp (scale 8), content blur nahi hoga */
+.glass-liquid-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.02);
+  filter: url(#glass-liquid);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+
+/* App-style safe area spacing (e.g. for android.websevix.com) */
+.pt-safe { padding-top: max(1rem, env(safe-area-inset-top, 0)); }
+.pb-safe { padding-bottom: max(1rem, env(safe-area-inset-bottom, 0)); }
+.pl-safe { padding-left: max(1rem, env(safe-area-inset-left, 0)); }
+.pr-safe { padding-right: max(1rem, env(safe-area-inset-right, 0)); }
+
+/* Scrollbar — hidden (scroll still works) */
+html { scrollbar-width: none; -ms-overflow-style: none; }
+html::-webkit-scrollbar { display: none; width: 0; height: 0; }
+body::-webkit-scrollbar { display: none; width: 0; height: 0; }
+::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+/* Selection */
+::selection { background: rgba(99,102,241,0.28); color: #F8FAFC; }
+
+/* Focus — subtle ring so it doesn’t look like a big blue box */
+:focus { outline: none; }
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.4);
+  border-radius: 4px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   KEYFRAMES — All long & cinematic
+───────────────────────────────────────────────────────── */
+
+/* Hero background — very slow morph, 20s cycle */
+@keyframes bgShift {
+  0%,100% { background-position: 0% 50%; }
+  50%     { background-position: 100% 50%; }
+}
+
+/* Slow floating element, 7s cycle */
+@keyframes floatSlow {
+  0%,100% { transform: translateY(0px) rotate(0deg); }
+  33%     { transform: translateY(-18px) rotate(0.8deg); }
+  66%     { transform: translateY(-10px) rotate(-0.5deg); }
+}
+
+/* Medium float, 5s */
+@keyframes floatMedium {
+  0%,100% { transform: translateY(0px); }
+  50%     { transform: translateY(-12px); }
+}
+
+/* Brand marquee */
+@keyframes marqueeX {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Gradient text shift — 8s */
+@keyframes gradientText {
+  0%,100% { background-position: 0% 50%; }
+  50%     { background-position: 100% 50%; }
+}
+
+/* Slow pulse dot */
+@keyframes pulseSlow {
+  0%,100% { opacity: 0.4; transform: scale(1); }
+  50%     { opacity: 1;   transform: scale(1.2); }
+}
+
+/* Aurora orb movement — 18s very slow */
+@keyframes auroraSlow {
+  0%,100% { transform: translate(0,0) scale(1); }
+  25%     { transform: translate(60px,-50px) scale(1.14); }
+  50%     { transform: translate(-40px,35px) scale(0.9); }
+  75%     { transform: translate(25px,-20px) scale(1.06); }
+}
+
+/* Slow shimmer sweep — 3s */
+@keyframes shimmerSlow {
+  from { background-position: -200% 0; }
+  to   { background-position: 200% 0; }
+}
+
+/* Line draw in */
+@keyframes lineDraw {
+  from { transform: scaleX(0); opacity: 0; }
+  to   { transform: scaleX(1); opacity: 1; }
+}
+
+/* Page-load reveal line at top */
+@keyframes revealTopLine {
+  from { transform: scaleX(0); transform-origin: left; opacity: 0; }
+  to   { transform: scaleX(1); transform-origin: left; opacity: 1; }
+}
+
+/* Slow rotation */
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Fade rise — longer */
+@keyframes fadeRise {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─────────────────────────────────────────────────────────
+   TYPOGRAPHY
+───────────────────────────────────────────────────────── */
+
+.font-display { font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif; }
+
+/* Gradient headline — animated, 8s cycle */
+.text-gradient {
+  background: linear-gradient(135deg, #818CF8 0%, #6366F1 30%, #A78BFA 65%, #22D3EE 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-live {
+  background: linear-gradient(270deg, #818CF8, #6366F1, #A78BFA, #22D3EE, #818CF8);
+  background-size: 400% 400%;
+  animation: gradientText 8s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─────────────────────────────────────────────────────────
+   COMPONENTS
+───────────────────────────────────────────────────────── */
+
+/* Glass card */
+.card {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 1.1rem;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Card with long hover transition */
+.card-hover {
+  transition: border-color 0.5s var(--ease-expo),
+              box-shadow   0.5s var(--ease-expo),
+              transform    0.5s var(--ease-expo);
+}
+.card-hover:hover {
+  border-color: rgba(99,102,241,0.32);
+  box-shadow: 0 0 0 1px rgba(99,102,241,0.12),
+              0 12px 50px rgba(0,0,0,0.45),
+              0 0 40px rgba(99,102,241,0.07);
+  transform: translateY(-4px);
+}
+
+/* Primary button */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  border-radius: 0.75rem;
+  transition: box-shadow 0.5s var(--ease-expo),
+              transform  0.4s var(--ease-expo);
+}
+.btn-primary:hover {
+  box-shadow: 0 0 35px rgba(99,102,241,0.45), 0 8px 24px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left 0.7s var(--ease-expo);
+}
+.btn-primary:hover::before { left: 180%; }
+
+/* Ghost button */
+.btn-ghost {
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #CBD5E1;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  border-radius: 0.75rem;
+  transition: border-color 0.4s var(--ease-expo),
+              color        0.4s var(--ease-expo),
+              background   0.4s var(--ease-expo),
+              transform    0.4s var(--ease-expo);
+}
+.btn-ghost:hover {
+  border-color: rgba(99,102,241,0.42);
+  color: #F8FAFC;
+  background: rgba(99,102,241,0.07);
+  transform: translateY(-2px);
+}
+
+/* Shimmer on demand */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: "";
+  position: absolute;
+  top: -50%; left: -60%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,0.12), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.8s var(--ease-expo);
+}
+.btn-shimmer:hover::after { left: 160%; }
+
+/* Section separator */
+.sep {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+}
+
+/* Section spacing */
+.section { padding-top: 5.5rem; padding-bottom: 5.5rem; }
+@media(min-width:1024px) { .section { padding-top: 7.5rem; padding-bottom: 7.5rem; } }
+
+/* Noise overlay */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Marquee */
+.marquee-wrap { overflow: hidden; position: relative; }
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marqueeX 32s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+/* Page-load top reveal line */
+.page-line {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, #6366F1, #A78BFA, #22D3EE);
+  transform-origin: left;
+  animation: revealTopLine 1.4s var(--ease-expo) forwards;
+  z-index: 9998;
+}
+
+/* ─────────────────────────────────────────────────────────
+   CINEMATIC AUTH KEYFRAMES
+───────────────────────────────────────────────────────── */
+
+/* Error / OTP wrong shake */
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  15%     { transform: translateX(-10px); }
+  30%     { transform: translateX(10px); }
+  45%     { transform: translateX(-8px); }
+  60%     { transform: translateX(8px); }
+  75%     { transform: translateX(-4px); }
+  90%     { transform: translateX(4px); }
+}
+.shake { animation: shake 0.5s var(--ease-expo) forwards; }
+
+/* Infinite shimmer sweep on submit button */
+@keyframes shimmer-sweep {
+  0%   { transform: translateX(-150%) skewX(-12deg); }
+  100% { transform: translateX(300%)  skewX(-12deg); }
+}
+.shimmer-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 20%, rgba(255,255,255,0.14) 50%, transparent 80%);
+  animation: shimmer-sweep 3s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+/* Scan-line sweep (one pass) */
+@keyframes scanline-sweep {
+  from { top: -4px; opacity: 0.6; }
+  to   { top: 105%; opacity: 0; }
+}
+.scanline::after {
+  content: "";
+  position: absolute;
+  inset-x: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent);
+  animation: scanline-sweep 0.45s linear forwards;
+}
+
+/* Rotating gradient border — uses CSS custom property via Framer Motion */
+@property --a {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes spin-border {
+  to { --a: 360deg; }
+}
+.border-spin {
+  background: conic-gradient(from var(--a), transparent 30%, #6366F1 50%, #8B5CF6 65%, #06B6D4 80%, transparent 90%);
+  animation: spin-border 4s linear infinite;
+}
+
+/* Hue cycle for success rainbow */
+@keyframes hue-cycle {
+  from { filter: hue-rotate(0deg); }
+  to   { filter: hue-rotate(360deg); }
+}
+.hue-cycle { animation: hue-cycle 0.4s linear infinite; }
+
+/* Conic gradient portal spin */
+@keyframes spin { to { rotate: 360deg; } }
+
+/* Logo float loop */
+@keyframes logo-float {
+  0%,100% { transform: translateY(0px); }
+  50%     { transform: translateY(-5px); }
+}
+.logo-float { animation: logo-float 3s ease-in-out infinite; }
+
+/* Input idle glow pulse */
+@keyframes idle-glow {
+  0%,100% { box-shadow: 0 0 0 1px rgba(99,102,241,0.1); }
+  50%     { box-shadow: 0 0 0 1px rgba(99,102,241,0.3), 0 0 12px rgba(99,102,241,0.12); }
+}
+.input-idle-glow { animation: idle-glow 4s ease-in-out infinite; }

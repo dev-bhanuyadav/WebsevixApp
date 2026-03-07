@@ -1,0 +1,23 @@
+# Block direct access to sensitive files
+<Files .env>
+  Order allow,deny
+  Deny from all
+</Files>
+
+<Files composer.phar>
+  Order allow,deny
+  Deny from all
+</Files>
+
+<Files composer.json>
+  Order allow,deny
+  Deny from all
+</Files>
+
+<Files composer.lock>
+  Order allow,deny
+  Deny from all
+</Files>
+
+# Only send-otp.php is publicly accessible
+# setup.php deletes itself after use

@@ -1,0 +1,10 @@
+{
+  "name": "Websevix",
+  "short_name": "Websevix",
+  "description": "Order your website. Chat with us, we build it, and deliver.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050510",
+  "theme_color": "#050510",
+  "orientation": "portrait-primary"
+}
