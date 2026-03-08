@@ -7,7 +7,7 @@ import type { BlastCanvasHandle } from "@/components/auth/BlastCanvas";
 
 interface SuccessStepProps {
   firstName?: string;
-  canvasRef?: React.RefObject<BlastCanvasHandle>;
+  canvasRef?: React.RefObject<BlastCanvasHandle | null>;
 }
 
 const WELCOME = "Welcome!".split("");
