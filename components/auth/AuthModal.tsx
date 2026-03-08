@@ -278,7 +278,7 @@ export function AuthModal({ defaultMode = "login", onSuccess, autoBlast = true, 
             <motion.div key="success" variants={stepVariants} initial="enter" animate="center" exit="exit">
               <SuccessStep
                 firstName={(state.userData.firstName ?? state.firstName) || ""}
-                canvasRef={canvasRef}
+                canvasRef={canvasRef as React.RefObject<BlastCanvasHandle>}
               />
             </motion.div>
           )}
