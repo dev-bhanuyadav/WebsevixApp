@@ -61,7 +61,7 @@ import { SiteSettingsProvider } from "@/context/SiteSettingsContext";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${dmSans.variable} ${spaceGrotesk.variable}`}>
-      <body className="font-sans bg-base text-snow antialiased">
+      <body className="font-sans bg-base text-snow antialiased" style={{ backgroundColor: "#050510", minHeight: "100vh" }}>
         <svg aria-hidden style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}>
           <defs>
             <filter id="liquid-refract" x="-10%" y="-10%" width="120%" height="120%">
